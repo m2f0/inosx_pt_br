@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>INOSX</title>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-color: #000000;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg-color: #000000;
+        --text-color: #ffffff;
+      }
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 500vh; /* 5 viewports para a rolagem */
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      font-family: sans-serif;
+      overflow-x: hidden;
+    }
+    .text-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      font-size: 2rem;
+      white-space: nowrap;
+    }
+    .text-container span {
+      margin-right: 8px;
+    }
+    /* Elemento para animar "And, WE CREATE AI." */
+    #text3-anim {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Elemento para exibir "INOSX" */
+    #text4 {
+      position: fixed;
+      left: 50%;
+      top: 50%; /* Ajustado para não sobrepor */
+      transform: translate(-50%, -50%);
+      font-size: 30rem;
+      font-weight: bold;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Ícone de seta para baixo */
+    .scroll-indicator {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+    .scroll-indicator:hover {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Container com os três textos em linha -->
+  <div class="text-container">
+    <span id="text1">Não existem mais websites...</span>
+    <span id="text2">... só existem AIs.</span>
+    <span id="text3">e, Nós criamos AIs.</span>
+  </div>
+  <!-- Elemento duplicado para animar "And, WE CREATE AI." -->
+  <div id="text3-anim">NÓS CRIAMOS AIs.</div>
+  <!-- Elemento para exibir "INOSX" -->
+  <div id="text4">INOSX</div>
+  <!-- Ícone de seta para baixo -->
+  <div class="scroll-indicator">
+    <svg width="40" height="40" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M12,16.5L5,9.5L6.41,8.09L12,13.67L17.59,8.09L19,9.5L12,16.5Z" />
+    </svg>
+  </div>
+
+  <script>
+    (function(){
+      let vh = window.innerHeight;
+      let fadeRange = 0.2 * vh; // 20% da viewport para fade in/out
+
+      const text1    = document.getElementById("text1");
+      const text2    = document.getElementById("text2");
+      const text3    = document.getElementById("text3");
+      const text3Anim= document.getElementById("text3-anim");
+      const text4    = document.getElementById("text4");
+      const scrollIndicator = document.querySelector(".scroll-indicator");
+
+      // Função para fade in/out (apenas para text2 e text3)
+      function fadeOpacity(relative, sectionHeight) {
+        if (relative < fadeRange) return relative / fadeRange;
+        if (relative > sectionHeight - fadeRange) return (sectionHeight - relative) / fadeRange;
+        return 1;
+      }
+
+      function update() {
+        const scrollY = window.scrollY;
+
+        // Seção 1: [0, vh] – text1 aparece imediatamente sem fade in
+        if (scrollY < vh) {
+          text1.style.opacity = 1;
+          scrollIndicator.style.opacity = 1; // Seta visível
+        } else {
+          text1.style.opacity = 0;
+        }
+
+        // Seção 2: [vh, 2vh] – text2 com fade in/out
+        if (scrollY >= vh && scrollY < 2 * vh) {
+          let rel = scrollY - vh;
+          text2.style.opacity = fadeOpacity(rel, vh);
+        } else {
+          text2.style.opacity = 0;
+        }
+
+        // Seção 3: [2vh, 3vh] – mostra text3 inline
+        if (scrollY >= 2 * vh && scrollY < 3 * vh) {
+          let rel = scrollY - 2 * vh;
+          text3.style.opacity = fadeOpacity(rel, vh);
+          text3Anim.style.opacity = 0;
+          text4.style.opacity = 0;
+        } else {
+          text3.style.opacity = 0;
+        }
+
+        // Seção 4: [3vh, 4vh] – anima text3-anim e fade in de text4
+        if (scrollY >= 3 * vh && scrollY < 4 * vh) {
+          scrollIndicator.style.opacity = 0; // Esconde a seta
+          let t = (scrollY - 3 * vh) / vh; // t varia de 0 a 1
+          text3.style.opacity = 0; // Oculta a versão inline
+
+          // Anima text3Anim: move de 50% (centro) para 10% do viewport
+          let startY = 0.5 * vh;
+          let endY = 0.1 * vh;
+          let currentY = startY + (endY - startY) * t;
+          text3Anim.style.top = currentY + "px";
+          text3Anim.style.left = "50%";
+          text3Anim.style.transform = "translate(-50%, -50%)";
+          text3Anim.style.opacity = 1;
+
+          // Fade in de text4 ("INOSX")
+          text4.style.opacity = t;
+        }
+        // Seção 5: [4vh, 5vh] – mantém o estado final
+        else if (scrollY >= 4 * vh) {
+          text3Anim.style.top = (0.1 * vh) + "px";
+          text3Anim.style.opacity = 1;
+          text4.style.opacity = 1;
+        } else {
+          text3Anim.style.opacity = 0;
+          text4.style.opacity = 0;
+        }
+      }
+
+      window.addEventListener("scroll", update);
+      window.addEventListener("resize", () => {
+        vh = window.innerHeight;
+        fadeRange = 0.2 * vh;
+        update();
+      });
+      update();
+    })();
+  </script>
+</body>
+</html>
