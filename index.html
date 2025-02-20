@@ -234,17 +234,6 @@
     Eu sou a INOSX, o que você deseja saber sobre a nossa empresa? Posso responder qualquer pergunta.
   </div>
 
-  <div class="chat-input-container" id="chatInput">
-    <div class="chat-input-wrapper">
-      <input type="text" class="chat-input" placeholder="Digite sua mensagem..." aria-label="Digite sua mensagem">
-      <button class="send-button" aria-label="Enviar mensagem">
-        <svg width="24" height="24" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M2,21L23,12L2,3V10L17,12L2,14V21Z" />
-        </svg>
-      </button>
-    </div>
-  </div>
-
   <!-- Adicione os elementos de áudio no HTML -->
   <audio id="audio1" preload="auto">
     <source src="audio/there-are-no-more-websites.mp3" type="audio/mpeg">
@@ -426,6 +415,66 @@
       // Primeira execução do update
       update();
     })();
+  </script>
+  <script type="module">
+    import Chatbot from "https://cdn.jsdelivr.net/npm/flowise-embed/dist/web.js"
+    Chatbot.init({
+        chatflowid: "373bb9b2-26ff-4bf1-aa2b-89d1893eeb97",
+        apiHost: "https://flow.inosx.ai",
+        theme: {
+            button: {
+                backgroundColor: 'var(--text-color)',
+                right: 20,
+                bottom: 20,
+                size: 48,
+                dragAndDrop: true,
+                iconColor: 'var(--bg-color)',
+                customIconSrc: 'INOSX.png',
+                autoWindowOpen: {
+                    autoOpen: true,
+                    openDelay: 2,
+                    autoOpenOnMobile: false
+                }
+            },
+            chatWindow: {
+                showTitle: true,
+                title: 'INOSX',
+                titleAvatarSrc: 'INOSX.png',
+                welcomeMessage: 'Eu sou a INOSX, o que você deseja saber sobre a nossa empresa? Posso responder qualquer pergunta.',
+                backgroundColor: 'var(--bg-color)',
+                height: 700,
+                width: 400,
+                fontSize: 16,
+                clearChatOnReload: false,
+                renderHTML: true,
+                botMessage: {
+                    backgroundColor: 'var(--bg-color)',
+                    textColor: 'var(--text-color)',
+                    showAvatar: true,
+                    avatarSrc: 'INOSX.png'
+                },
+                userMessage: {
+                    backgroundColor: 'var(--text-color)',
+                    textColor: 'var(--bg-color)',
+                    showAvatar: true,
+                    avatarSrc: 'INOSX.png'
+                },
+                textInput: {
+                    placeholder: 'Digite sua mensagem...',
+                    backgroundColor: 'var(--bg-color)',
+                    textColor: 'var(--text-color)',
+                    sendButtonColor: 'var(--text-color)',
+                    autoFocus: true
+                },
+                footer: {
+                    textColor: 'var(--text-color)',
+                    text: 'Desenvolvido por',
+                    company: 'INOSX',
+                    companyLink: 'https://inosx.com.br'
+                }
+            }
+        }
+    })
   </script>
 </body>
 </html>
